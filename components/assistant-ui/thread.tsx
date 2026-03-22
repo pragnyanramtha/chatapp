@@ -94,10 +94,10 @@ const ThreadWelcome: FC = () => {
       <div className="aui-thread-welcome-center flex w-full grow flex-col items-center justify-center">
         <div className="aui-thread-welcome-message flex size-full flex-col justify-center px-4">
           <h1 className="aui-thread-welcome-message-inner fade-in slide-in-from-bottom-1 animate-in fill-mode-both font-semibold text-2xl duration-200">
-            yo, there
+            this is me !
           </h1>
           <p className="aui-thread-welcome-message-inner fade-in slide-in-from-bottom-1 animate-in fill-mode-both text-muted-foreground text-xl delay-75 duration-200">
-            the model is currently running with Q4_K_M quantization, reponses may be slow and include hallucinations, please dont mind the issues ! 
+            the model is my personality clone, finetuned on my messy chat data, and doesn't include guardrails, also it's currently running with Q4_K_M quantization on free tier, reponses may be slow and may include hallucinations, please dont mind these issues ! 
           </p>
         </div>
       </div>
