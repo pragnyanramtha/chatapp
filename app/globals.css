@@ -138,4 +138,8 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .thread-viewport > [data-radix-scroll-area-content] {
+    @apply flex flex-col items-center self-stretch bg-inherit;
+  }
 }
