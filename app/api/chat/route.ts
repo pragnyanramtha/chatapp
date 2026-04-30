@@ -8,31 +8,32 @@ import {
   type UIMessage,
 } from "ai";
 
-const backendBaseUrl = (
-  process.env.PRAGNYAN_API_BASE_URL ??
-  "https://pragnyanramtha--pragnyan-clone-api-fastapi-app.modal.run"
+const openRouterBaseUrl = (
+  process.env.OPENROUTER_API_BASE_URL ?? "https://openrouter.ai/api/v1"
 ).replace(/\/$/, "");
 
-const modelId = process.env.PRAGNYAN_MODEL_ID ?? "pragnyan-clone-v1";
-
-const pragnyan = createOpenAI({
-  baseURL: `${backendBaseUrl}/v1`,
-  apiKey: process.env.PRAGNYAN_API_KEY ?? "local-dev",
-  name: "pragnyan",
+const openRouter = createOpenAI({
+  baseURL: openRouterBaseUrl,
+  apiKey: process.env.OPENROUTER_API_KEY ?? "",
+  name: "openrouter",
 });
 
 export async function POST(req: Request) {
   const {
     messages,
     system,
+    model,
   }: {
     messages: UIMessage[];
     system?: string;
+    model?: string;
     tools?: Record<string, { description?: string; parameters: JSONSchema7 }>;
   } = await req.json();
 
+  const modelId = model ?? "openai/gpt-4o-mini";
+
   const result = await generateText({
-    model: pragnyan.chat(modelId),
+    model: openRouter.chat(modelId),
     messages: await convertToModelMessages(messages),
     system,
     maxRetries: 1,
