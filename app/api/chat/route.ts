@@ -10,8 +10,6 @@ import {
 const hackclubAI = createOpenAI({
   apiKey: process.env.HACKCLUB_API_KEY || process.env.OPENAI_API_KEY,
   baseURL: "https://ai.hackclub.com/proxy/v1",
-  defaultQuery: {},
-  defaultHeaders: {},
 });
 
 export async function POST(req: Request) {
@@ -36,5 +34,18 @@ export async function POST(req: Request) {
 
   return result.toUIMessageStreamResponse({
     sendReasoning: true,
+    messageMetadata: ({ part }) => {
+      if (part.type === "finish") {
+        return {
+          usage: part.totalUsage,
+        };
+      }
+      if (part.type === "finish-step") {
+        return {
+          modelId: part.response.modelId,
+        };
+      }
+      return undefined;
+    },
   });
 }
