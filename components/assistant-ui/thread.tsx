@@ -6,6 +6,7 @@ import {
 import { ContextDisplay } from "@/components/assistant-ui/context-display";
 import { DirectiveText } from "@/components/assistant-ui/directive-text";
 import { MarkdownText } from "@/components/assistant-ui/markdown-text";
+import { ModelSelector } from "@/components/assistant-ui/model-selector";
 import { Reasoning } from "@/components/assistant-ui/reasoning";
 import { ComposerTriggerPopover } from "@/components/assistant-ui/composer-trigger-popover";
 import { ScrollBar } from "@/components/ui/scroll-area";
@@ -65,21 +66,23 @@ export const Thread: FC = () => {
             data-slot="aui_thread-viewport"
             className="relative flex flex-1 flex-col overflow-x-auto overflow-y-scroll scroll-smooth"
           >
-            <div className="mx-auto flex w-full max-w-(--thread-max-width) flex-1 flex-col px-4 pt-4">
-              <AuiIf condition={(s) => s.thread.isEmpty}>
-                <ThreadWelcome />
-              </AuiIf>
+            <div className="mx-auto flex w-full max-w-(--thread-max-width) flex-1 flex-col px-4">
+              <div className="flex flex-1 flex-col gap-4">
+                <AuiIf condition={(s) => s.thread.isEmpty}>
+                  <ThreadWelcome />
+                </AuiIf>
 
-              <div
-                data-slot="aui_message-group"
-                className="mb-10 flex flex-col gap-y-8 empty:hidden"
-              >
-                <ThreadPrimitive.Messages>
-                  {() => <ThreadMessage />}
-                </ThreadPrimitive.Messages>
+                <div
+                  data-slot="aui_message-group"
+                  className="mb-10 flex flex-col gap-y-8 empty:hidden"
+                >
+                  <ThreadPrimitive.Messages>
+                    {() => <ThreadMessage />}
+                  </ThreadPrimitive.Messages>
+                </div>
               </div>
 
-              <ThreadPrimitive.ViewportFooter className="aui-thread-viewport-footer sticky bottom-0 mt-auto flex flex-col gap-4 overflow-visible rounded-t-(--composer-radius) bg-background pb-4 md:pb-6">
+              <ThreadPrimitive.ViewportFooter className="aui-thread-viewport-footer sticky bottom-0 mt-4 flex flex-col gap-4 overflow-visible rounded-t-(--composer-radius) bg-background pb-4 md:pb-6">
                 <ThreadScrollToBottom />
                 <Composer />
               </ThreadPrimitive.ViewportFooter>
@@ -221,6 +224,14 @@ const ComposerAction: FC = () => {
     <div className="aui-composer-action-wrapper relative flex items-center justify-between">
       <ComposerAddAttachment />
       <div className="flex items-center gap-2">
+        <ModelSelector
+          models={[
+            { id: "gpt-4o-mini", name: "GPT-4o Mini", description: "Fast & efficient" },
+            { id: "gpt-4o", name: "GPT-4o", description: "Balanced" },
+          ]}
+          defaultValue="gpt-4o-mini"
+          size="sm"
+        />
         <ContextDisplay.Bar modelContextWindow={128000} side="top" />
         <AuiIf condition={(s) => !s.thread.isRunning}>
           <ComposerPrimitive.Send asChild>
