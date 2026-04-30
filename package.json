@@ -8,8 +8,8 @@
     "start": "next start",
     "format": "biome format .",
     "format:fix": "biome format --write .",
-    "lint": "biome check .",
-    "lint:fix": "biome check --write ."
+    "lint": "biome check app components lib",
+    "lint:fix": "biome check app components lib --write"
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.41",

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.13/schema.json",
+  "css": {
+    "parser": {
+      "cssModules": true,
+      "tailwindDirectives": true
+    }
+  },
+  "files": {
+    "includes": [
+      "**",
+      "!!**/.next",
+      "!!**/node_modules"
+    ]
+  },
+  "linter": {
+    "rules": {
+      "performance": {
+        "noImgElement": "off"
+      },
+      "a11y": {
+        "noRedundantAlt": "off",
+        "useFocusableInteractive": "off",
+        "useSemanticElements": "off"
+      }
+    }
+  }
+}
