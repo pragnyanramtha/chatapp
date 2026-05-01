@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 32">
-  <rect x="0" y="0" width="32" height="32" rx="8" fill="#EC3750"/>
-  <text x="16" y="23" font-family="Arial,sans-serif" font-weight="bold" font-size="20" fill="white" text-anchor="middle">H</text>
+  <rect x="0" y="0" width="32" height="32" rx="8" fill="#1a1a2e"/>
+  <path d="M18 6L10 18h6l-2 8 10-12h-6z" fill="#FFD166"/>
   <text x="42" y="23" font-family="Arial,sans-serif" font-weight="bold" font-size="20" fill="#EC3750">HackClub</text>
   <text x="112" y="23" font-family="Arial,sans-serif" font-weight="bold" font-size="20" fill="#666">AI</text>
 </svg>
