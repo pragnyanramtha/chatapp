@@ -1,3 +1,36 @@
+/**
+ * ThreadList Component - Display list of threads for conversation switching
+ * 
+ * Shows list of active threads with ability to create new, archive, and delete.
+ * This is the custom layout version. For a complete sidebar, use ThreadListSidebar.
+ * 
+ * Features:
+ * - New thread creation button
+ * - Thread list with loading skeleton
+ * - Archive action
+ * - Visual indication of current active thread
+ * - Hover menu for additional actions
+ * 
+ * @component
+ * @example
+ * // Custom grid layout
+ * <div className="grid grid-cols-[200px_1fr]">
+ *   <ThreadList />
+ *   <Thread />
+ * </div>
+ * 
+ * @example
+ * // Or use ThreadListSidebar for complete sidebar
+ * <SidebarProvider>
+ *   <ThreadListSidebar />
+ *   <SidebarInset><Thread /></SidebarInset>
+ * </SidebarProvider>
+ * 
+ * @see https://www.assistant-ui.com/docs/ui/thread-list
+ * @see /docs/ASSISTANT_UI_COMPONENTS.md
+ * @see /docs/ASSISTANT_UI_RECIPES.md
+ */
+
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -9,6 +42,13 @@ import {
 import { ArchiveIcon, MoreHorizontalIcon, PlusIcon } from "lucide-react";
 import type { FC } from "react";
 
+/**
+ * ThreadList Component
+ * 
+ * Main thread list container with new button, loading state, and thread items.
+ * 
+ * @returns Rendered thread list
+ */
 export const ThreadList: FC = () => {
   return (
     <ThreadListPrimitive.Root className="aui-root aui-thread-list-root flex flex-col gap-1">
@@ -25,6 +65,14 @@ export const ThreadList: FC = () => {
   );
 };
 
+/**
+ * ThreadListNew Component
+ * 
+ * Button to create a new thread.
+ * Uses ThreadListPrimitive.New for automatic routing.
+ * 
+ * @returns Rendered new thread button
+ */
 const ThreadListNew: FC = () => {
   return (
     <ThreadListPrimitive.New asChild>
@@ -39,6 +87,14 @@ const ThreadListNew: FC = () => {
   );
 };
 
+/**
+ * ThreadListSkeleton Component
+ * 
+ * Loading skeleton shown while threads are being fetched.
+ * Displays 5 placeholder items to match typical list size.
+ * 
+ * @returns Rendered skeleton placeholders
+ */
 const ThreadListSkeleton: FC = () => {
   return (
     <div className="flex flex-col gap-1">
@@ -56,6 +112,15 @@ const ThreadListSkeleton: FC = () => {
   );
 };
 
+/**
+ * ThreadListItem Component
+ * 
+ * Individual thread list item with trigger and more menu.
+ * Shows thread title and archive action.
+ * Highlights active thread with background.
+ * 
+ * @returns Rendered thread item
+ */
 const ThreadListItem: FC = () => {
   return (
     <ThreadListItemPrimitive.Root className="aui-thread-list-item group flex h-9 items-center gap-2 rounded-lg transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-none data-active:bg-muted">
@@ -67,6 +132,15 @@ const ThreadListItem: FC = () => {
   );
 };
 
+/**
+ * ThreadListItemMore Component
+ * 
+ * Dropdown menu for additional thread actions.
+ * Shows on hover or when focused.
+ * Contains archive action.
+ * 
+ * @returns Rendered more menu
+ */
 const ThreadListItemMore: FC = () => {
   return (
     <ThreadListItemMorePrimitive.Root>

@@ -139,7 +139,28 @@
     @apply bg-background text-foreground;
   }
 
+  .thread-viewport {
+    display: flex !important;
+    flex: 1 1 0%;
+    flex-direction: column;
+    min-height: 0;
+  }
+
   .thread-viewport > [data-radix-scroll-area-content] {
     @apply flex flex-col items-center self-stretch bg-inherit;
+  }
+
+  /* Ensure AuiIf wrapper + welcome screen fill available height for centering */
+  .aui-thread-welcome-root {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* AuiIf renders a plain div — make it fill the flex parent */
+  [data-slot="aui_message-group"]:empty ~ *,
+  .aui-thread-welcome-root,
+  .aui-thread-welcome-root ~ div {
+    flex: 1;
   }
 }

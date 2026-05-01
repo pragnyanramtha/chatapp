@@ -1,3 +1,32 @@
+/**
+ * ThreadListSidebar Component - Complete sidebar layout with thread list
+ * 
+ * Provides a full-featured sidebar for displaying thread list with header and footer.
+ * This is the complete solution for most use cases. For custom layouts, use ThreadList.
+ * 
+ * Features:
+ * - Header with assistant-ui branding
+ * - Thread list (new, archive, delete)
+ * - Footer with GitHub link
+ * - Mobile-responsive (collapses on small screens)
+ * - Sidebar rail for mobile navigation
+ * 
+ * @component
+ * @example
+ * // With SidebarProvider (RECOMMENDED)
+ * <SidebarProvider>
+ *   <ThreadListSidebar />
+ *   <SidebarInset>
+ *     <SidebarTrigger />
+ *     <Thread />
+ *   </SidebarInset>
+ * </SidebarProvider>
+ * 
+ * @see https://www.assistant-ui.com/docs/ui/thread-list
+ * @see /docs/ASSISTANT_UI_COMPONENTS.md
+ * @see /docs/ASSISTANT_UI_RECIPES.md
+ */
+
 import type * as React from "react";
 import { MessagesSquare } from "lucide-react";
 import { GitHubIcon } from "@/components/icons/github";
@@ -14,6 +43,16 @@ import {
 } from "@/components/ui/sidebar";
 import { ThreadList } from "@/components/assistant-ui/thread-list";
 
+/**
+ * ThreadListSidebar Component
+ * 
+ * Complete sidebar layout with thread list.
+ * Wraps ThreadList with header (branding) and footer (GitHub link).
+ * Mobile-responsive via SidebarProvider integration.
+ * 
+ * @param props Sidebar component props
+ * @returns Rendered sidebar
+ */
 export function ThreadListSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {

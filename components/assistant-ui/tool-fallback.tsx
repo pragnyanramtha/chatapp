@@ -90,15 +90,17 @@ const statusIconMap: Record<ToolStatus, React.ElementType> = {
   "requires-action": AlertCircleIcon,
 };
 
+type ToolFallbackTriggerProps = React.ComponentProps<typeof CollapsibleTrigger> & {
+  toolName: string;
+  status?: ToolCallMessagePartStatus;
+};
+
 function ToolFallbackTrigger({
   toolName,
   status,
   className,
   ...props
-}: React.ComponentProps<typeof CollapsibleTrigger> & {
-  toolName: string;
-  status?: ToolCallMessagePartStatus;
-}) {
+}: ToolFallbackTriggerProps) {
   const statusType = status?.type ?? "complete";
   const isRunning = statusType === "running";
   const isCancelled =
@@ -178,7 +180,7 @@ function ToolFallbackContent({
       )}
       {...props}
     >
-      <div className="mt-3 flex flex-col gap-2 border-t pt-2">{children}</div>
+      {children}
     </CollapsibleContent>
   );
 }
@@ -195,10 +197,14 @@ function ToolFallbackArgs({
   return (
     <div
       data-slot="tool-fallback-args"
-      className={cn("aui-tool-fallback-args px-4", className)}
+      className={cn(
+        "aui-tool-fallback-args border-t border-dashed px-4 pt-2",
+        className,
+      )}
       {...props}
     >
-      <pre className="aui-tool-fallback-args-value whitespace-pre-wrap">
+      <p className="aui-tool-fallback-args-header font-semibold">Arguments:</p>
+      <pre className="aui-tool-fallback-args-content whitespace-pre-wrap">
         {argsText}
       </pre>
     </div>

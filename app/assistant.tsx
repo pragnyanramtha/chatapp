@@ -24,12 +24,10 @@ export const Assistant = () => {
   return (
     <AssistantRuntimeProvider runtime={runtime}>
       <SidebarProvider>
-        <div className="flex h-dvh w-full pr-0.5">
+        <div className="flex h-dvh min-h-0 w-full pr-0.5">
           <ThreadListSidebar />
-          <SidebarInset>
-            <div className="flex-1 overflow-hidden">
-              <Thread />
-            </div>
+          <SidebarInset className="flex flex-col min-h-0 overflow-hidden">
+            <Thread />
           </SidebarInset>
         </div>
       </SidebarProvider>

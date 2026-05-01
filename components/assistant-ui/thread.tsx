@@ -1,16 +1,15 @@
-import {
-  ComposerAddAttachment,
-  ComposerAttachments,
-  UserMessageAttachments,
-} from "@/components/assistant-ui/attachment";
+import { ComposerAddAttachment, ComposerAttachments, UserMessageAttachments } from "@/components/assistant-ui/attachment";
 import { ContextDisplay } from "@/components/assistant-ui/context-display";
 import { DirectiveText } from "@/components/assistant-ui/directive-text";
 import { MarkdownText } from "@/components/assistant-ui/markdown-text";
 import { ModelSelector } from "@/components/assistant-ui/model-selector";
-import { Reasoning } from "@/components/assistant-ui/reasoning";
+import { Reasoning, ReasoningGroup } from "@/components/assistant-ui/reasoning";
 import { ComposerTriggerPopover } from "@/components/assistant-ui/composer-trigger-popover";
+import { QuoteBlock, SelectionToolbar, ComposerQuotePreview } from "@/components/assistant-ui/quote";
 import { ScrollBar } from "@/components/ui/scroll-area";
 import { ToolFallback } from "@/components/assistant-ui/tool-fallback";
+import { ToolGroup } from "@/components/assistant-ui/tool-group";
+import SourcesMessagePart, { Sources } from "@/components/assistant-ui/sources";
 import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -62,38 +61,44 @@ export const Thread: FC = () => {
       >
         <ScrollAreaPrimitive.Viewport className="thread-viewport" asChild>
           <ThreadPrimitive.Viewport
-            turnAnchor="top"
+            turnAnchor="bottom"
             data-slot="aui_thread-viewport"
-            className="relative flex flex-1 flex-col overflow-x-auto overflow-y-scroll scroll-smooth"
+            className="relative flex flex-1 min-h-0 flex-col overflow-x-auto overflow-y-scroll scroll-smooth"
           >
             <div className="mx-auto flex w-full max-w-(--thread-max-width) flex-1 flex-col px-4">
-              <div className="flex flex-1 flex-col gap-4">
+              <div className="flex flex-1 flex-col">
                 <AuiIf condition={(s) => s.thread.isEmpty}>
                   <ThreadWelcome />
                 </AuiIf>
 
                 <div
                   data-slot="aui_message-group"
-                  className="mb-10 flex flex-col gap-y-8 empty:hidden"
+                  className="mb-4 flex flex-col gap-y-8 empty:hidden"
                 >
                   <ThreadPrimitive.Messages>
                     {() => <ThreadMessage />}
                   </ThreadPrimitive.Messages>
                 </div>
               </div>
-
-              <ThreadPrimitive.ViewportFooter className="aui-thread-viewport-footer sticky bottom-0 mt-4 flex flex-col gap-4 overflow-visible rounded-t-(--composer-radius) bg-background pb-4 md:pb-6">
-                <ThreadScrollToBottom />
-                <Composer />
-              </ThreadPrimitive.ViewportFooter>
             </div>
           </ThreadPrimitive.Viewport>
         </ScrollAreaPrimitive.Viewport>
         <ScrollBar />
+
+        <SelectionToolbar />
+
+        {/* Composer footer — always pinned to the bottom outside the scroll area */}
+        <div className="mx-auto w-full max-w-(--thread-max-width) px-4 pb-4 md:pb-6">
+          <div className="relative flex flex-col gap-4">
+            <ThreadScrollToBottom />
+            <Composer />
+          </div>
+        </div>
       </ThreadPrimitive.Root>
     </ScrollAreaPrimitive.Root>
   );
 };
+
 
 const ThreadMessage: FC = () => {
   const role = useAuiState((s) => s.message.role);
@@ -120,9 +125,9 @@ const ThreadScrollToBottom: FC = () => {
 
 const ThreadWelcome: FC = () => {
   return (
-    <div className="aui-thread-welcome-root my-auto flex grow flex-col">
-      <div className="aui-thread-welcome-center flex w-full grow flex-col items-center justify-center">
-        <div className="aui-thread-welcome-message flex size-full flex-col justify-center px-4">
+    <div className="aui-thread-welcome-root flex flex-1 flex-col">
+      <div className="aui-thread-welcome-center flex w-full flex-1 flex-col items-start justify-center">
+        <div className="aui-thread-welcome-message flex flex-col gap-1 px-4 py-8">
           <h1 className="aui-thread-welcome-message-inner fade-in slide-in-from-bottom-1 animate-in fill-mode-both font-semibold text-2xl duration-200">
             Hello there!
           </h1>
@@ -193,6 +198,7 @@ const Composer: FC = () => {
             className="flex w-full flex-col gap-2 rounded-(--composer-radius) border bg-background p-(--composer-padding) transition-shadow focus-within:border-ring/75 focus-within:ring-2 focus-within:ring-ring/20 data-[dragging=true]:border-ring data-[dragging=true]:border-dashed data-[dragging=true]:bg-accent/50"
           >
             <ComposerAttachments />
+            <ComposerQuotePreview />
             <ComposerPrimitive.Input
               placeholder="Type @ for mentions, / for commands..."
               className="aui-composer-input max-h-32 min-h-10 w-full resize-none bg-transparent px-1.75 py-1 text-sm outline-none placeholder:text-muted-foreground/80"
@@ -276,6 +282,17 @@ const MessageError: FC = () => {
   );
 };
 
+/**
+ * AssistantMessage Component
+ * 
+ * Renders assistant messages with all message part components:
+ * - Reasoning/ReasoningGroup: AI thinking with auto-grouping
+ * - ToolFallback/ToolGroup: Tool execution with auto-grouping
+ * - Sources: URL references with favicons
+ * - MarkdownText: Formatted text content
+ * 
+ * Includes action bar and branch picker for message interactions.
+ */
 const AssistantMessage: FC = () => {
   const ACTION_BAR_PT = "pt-1.5";
   const ACTION_BAR_HEIGHT = `-mb-7.5 min-h-7.5 ${ACTION_BAR_PT}`;
@@ -296,6 +313,7 @@ const AssistantMessage: FC = () => {
             if (part.type === "reasoning") return <Reasoning {...part} />;
             if (part.type === "tool-call")
               return part.toolUI ?? <ToolFallback {...part} />;
+            if (part.type === "source") return <SourcesMessagePart url={part.url} title={part.title} sourceType={part.sourceType} />
             return null;
           }}
         </MessagePrimitive.Parts>
@@ -372,6 +390,9 @@ const UserMessage: FC = () => {
 
       <div className="aui-user-message-content-wrapper relative col-start-2 min-w-0">
         <div className="aui-user-message-content wrap-break-word peer rounded-2xl bg-muted px-4 py-2.5 text-foreground empty:hidden">
+          <MessagePrimitive.Quote>
+            {(quote) => <QuoteBlock {...quote} />}
+          </MessagePrimitive.Quote>
           <MessagePrimitive.Parts components={{ Text: DirectiveText }} />
         </div>
         <div className="aui-user-action-bar-wrapper absolute top-1/2 left-0 -translate-x-full -translate-y-1/2 pr-2 peer-empty:hidden">
