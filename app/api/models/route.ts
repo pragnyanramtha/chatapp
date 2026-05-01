@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const MODELS_URL = "https://ai.hackclub.com/proxy/v1/models";
+const MODELS_URL = `${process.env.OPENROUTER_API_BASE_URL || "https://ai.hackclub.com/proxy/v1"}/models`;
 
 export async function GET() {
   const apiKey = process.env.HACKCLUB_API_KEY || process.env.OPENAI_API_KEY;
